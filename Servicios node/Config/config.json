@@ -1,7 +1,7 @@
 {
     "development": {
-      "username": "root",
-      "password": "!Revf020208!",
+      "username": "usuarioproyectoRed",
+      "password": "contrasenia123",
       "database": "ventanillaenlinea",
       "host": "localhost",
       "dialect": "mysql",

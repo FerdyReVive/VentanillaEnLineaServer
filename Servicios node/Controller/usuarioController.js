@@ -3,10 +3,7 @@ const {response} = require("express");
 //*******************************************
 const Usuario = require("../DTOs/Usuario");
 const UsuarioDAO = require("../DataAccessObjects/UsuarioDAO");
-const pruebaGet = async (req,res = response) => {
-    let usuarioPrueba = new Usuario(1, "Juanito", "correo@correo.com", "123");
-    res.json(usuarioPrueba)
-}
+
 const pruebaPost = async (req,res = response) => {
     const {nombre, clave, correo, contrasena, idTipoUsuario} = req.body;
     console.log(nombre, clave, correo, contrasena);
@@ -14,4 +11,44 @@ const pruebaPost = async (req,res = response) => {
     await UsuarioDAO.crearUsuario(usuario);
     res.status(200).json({ message: 'Se registró'});
 }
-module.exports = {pruebaGet, pruebaPost}
+
+const pruebaPatch = async (req,res = response) => {
+    const { idUsuario } = req.params;
+    const { nombre, clave, correo, contrasena, idTipoUsuario } = req.body;
+    console.log(`Editando usuario con ID: ${idUsuario}`);
+    console.log({ nombre, clave, correo, contrasena, idTipoUsuario });
+    const usuarioAux = { nombre, clave, correo, contrasena, idTipoUsuario };
+    try {
+        await UsuarioDAO.editarUsuario(idUsuario, usuarioAux);
+        res.status(200).json({ message: 'Usuario editado correctamente' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al editar el usuario' });
+    }
+}
+
+const pruebaDelete = async (req,res = response) => {
+    const { idUsuario } = req.params;
+    console.log(`Eliminando usuario con ID: ${idUsuario}`);
+    try {
+        await UsuarioDAO.eliminarUsuario(idUsuario);
+        res.status(200).json({ message: 'Usuario eliminado correctamente' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al eliminar el usuario' });
+    }
+}
+
+const pruebaGetUsuarios = async (req, res = response) => {
+    const { filtro } = req.query; 
+    console.log(`Consultando usuarios con filtro: ${JSON.stringify(filtro)}`);
+    try {
+        const usuarios = await UsuarioDAO.consultarUsuarios(filtro ? JSON.parse(filtro) : {}); 
+        res.status(200).json(usuarios);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al consultar usuarios' });
+    }
+};
+
+module.exports = {pruebaGetUsuarios, pruebaPost, pruebaPatch, pruebaDelete}
