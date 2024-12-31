@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package tramitespackage;
+
+service filemanagement {
+    rpc subirArchivo(subirArchivoPeticion) returns (subirArchivoRespuesta) {};
+    rpc descargarArchivo(descargarArchivoPeticion) returns (descargarArchivoRespuesta) {};
+}
+
+message subirArchivoPeticion {
+    int32 idTramite = 1;
+    string nombreArchivo = 2;
+    string extension = 3;
+    bytes contenido = 4;
+}
+
+message subirArchivoRespuesta {
+    int32 respuesta = 1;
+}
+
+message descargarArchivoPeticion {
+    int32 idDocumento = 1;
+}
+
+message descargarArchivoRespuesta {
+    bytes contenido = 1;
+}
+
