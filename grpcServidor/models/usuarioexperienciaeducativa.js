@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  const UsuarioExperienciaEducativa = sequelize.define('usuarioexperienciaeducativa', {
+  return sequelize.define('usuarioexperienciaeducativa', {
     idUsuarioExperienciaEducativa: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -52,18 +52,4 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-
-  UsuarioExperienciaEducativa.associate = function(models) {
-    UsuarioExperienciaEducativa.belongsTo(models.usuario, {
-      foreignKey: 'idUsuario',
-      as: 'usuario'
-    });
-
-    UsuarioExperienciaEducativa.belongsTo(models.experienciaeducativa, {
-      foreignKey: 'idExperienciaEducativa',
-      as: 'experienciaEducativa'
-    });
-  };
-
-  return UsuarioExperienciaEducativa;
 };

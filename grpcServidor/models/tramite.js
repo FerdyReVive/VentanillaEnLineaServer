@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
-
 module.exports = function(sequelize, DataTypes) {
-  const Tramite = sequelize.define('tramite', {
+  return sequelize.define('tramite', {
     idTramite: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -27,11 +26,6 @@ module.exports = function(sequelize, DataTypes) {
         model: 'usuario',
         key: 'idUsuario'
       }
-    },
-    estado: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
     }
   }, {
     sequelize,
@@ -62,18 +56,4 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-
-  Tramite.associate = function(models) {
-    Tramite.belongsTo(models.tipotramite, {
-      foreignKey: 'idTipoTramite',
-      as: 'tipoTramite'
-    });
-
-    Tramite.belongsTo(models.usuario, {
-      foreignKey: 'idUsuario',
-      as: 'usuario'
-    });
-  };
-
-  return Tramite;
 };

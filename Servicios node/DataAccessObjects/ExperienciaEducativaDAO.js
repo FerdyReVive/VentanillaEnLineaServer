@@ -1,5 +1,5 @@
 const { where } = require("sequelize");
-const { experienciaeducativa } = require('../Models/index')
+const { experienciaeducativa, usuarioexperienciaeducativa } = require('../Models/index')
 
 class ExperienciaEducativaDAO {
 
@@ -24,6 +24,24 @@ class ExperienciaEducativaDAO {
             where: filtro
         });
     }
+
+    static async consultarExperienciasCompletasPorUsuario(idUsuario) {
+        if (!idUsuario) {
+            throw new Error('El idUsuario es obligatorio');
+        }
+    
+        return await experienciaeducativa.findAll({
+            include: [
+                {
+                    model: usuarioexperienciaeducativa,
+                    as: 'usuarioExperiencia',
+                    where: { idUsuario },
+                    attributes: []
+                }
+            ]
+        });
+    }
+    
 }
 
 module.exports = ExperienciaEducativaDAO;

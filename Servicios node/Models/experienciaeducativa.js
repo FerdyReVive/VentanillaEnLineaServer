@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('experienciaeducativa', {
+  const ExperienciaEducativa = sequelize.define('experienciaeducativa', {
     idExperienciaEducativa: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -30,4 +30,22 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+
+  ExperienciaEducativa.associate = function(models) {
+    // Relación con la tabla intermedia usuarioexperienciaeducativa
+    ExperienciaEducativa.hasMany(models.usuarioexperienciaeducativa, {
+        foreignKey: 'idExperienciaEducativa',
+        as: 'usuarioExperiencia', // Alias debe coincidir con el utilizado en el DAO
+    });
+
+    // Relación con usuarios a través de usuarioexperienciaeducativa
+    ExperienciaEducativa.belongsToMany(models.usuario, {
+        through: models.usuarioexperienciaeducativa,
+        foreignKey: 'idExperienciaEducativa',
+        otherKey: 'idUsuario',
+        as: 'usuarios',
+    });
+};
+
+  return ExperienciaEducativa;
 };

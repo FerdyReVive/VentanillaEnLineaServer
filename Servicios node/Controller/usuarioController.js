@@ -1,6 +1,5 @@
 //Usar este import para todos los controllers
 const {response} = require("express");
-//*******************************************
 const Usuario = require("../DTOs/Usuario");
 const UsuarioDAO = require("../DataAccessObjects/UsuarioDAO");
 
@@ -40,10 +39,15 @@ const pruebaDelete = async (req,res = response) => {
 }
 
 const pruebaGetUsuarios = async (req, res = response) => {
-    const { filtro } = req.query; 
-    console.log(`Consultando usuarios con filtro: ${JSON.stringify(filtro)}`);
+    const { idUsuario } = req.params;
+    console.log(`Consultando usuarios asignados al secretario con id: ${idUsuario}`);
+
     try {
-        const usuarios = await UsuarioDAO.consultarUsuarios(filtro ? JSON.parse(filtro) : {}); 
+        if (!idUsuario) {
+            return res.status(400).json({ message: 'El idSecretario es obligatorio' });
+        }
+
+        const usuarios = await UsuarioDAO.consultarUsuariosPorSecretario(idUsuario);
         res.status(200).json(usuarios);
     } catch (error) {
         console.error(error);

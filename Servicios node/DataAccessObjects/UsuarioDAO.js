@@ -19,9 +19,16 @@ class UsuarioDAO {
         });
     }
 
-    static async consultarUsuarios(filtro = {}) {
+    static async consultarUsuariosPorSecretario(idSecretario) {
+        if (!idSecretario) {
+            throw new Error('El identificador del secretario es obligatorio');
+        }
+    
         return await usuario.findAll({
-            where: filtro
+            where: {
+                idSecretarioAsignado: idSecretario,
+                estado: 1 
+            }
         });
     }
 

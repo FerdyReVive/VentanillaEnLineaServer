@@ -1,13 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 const grpc = require('@grpc/grpc-js');
+const util = require('util');
+const readFileAsync = util.promisify(fs.readFile);
+const DocumentoDAO = require('../DataAccesObjects/DocumentoDAO')
 
 const subirArchivo = (req, res) => {
     try {
-        const rutaProyecto = path.join("C:", "Users", "nando", "Desktop");
+        const rutaProyecto = obtenerFolderTramite(req.request.idTramite);
         const rutaArchivo = path.join(rutaProyecto, req.request.nombreArchivo);
 
-        reMakeFile(req.request.contenido, rutaArchivo, (err, statuscode) => {
+        rehacerArchivo(req.request.contenido, rutaArchivo, (err, statuscode) => {
             if (err) {
                 console.error('Error al guardar el archivo:', err);
                 return res({
@@ -17,6 +20,10 @@ const subirArchivo = (req, res) => {
             }
 
             console.log('Archivo guardado exitosamente:', statuscode);
+
+
+            const informacion = {nombre : req.request.nombreArchivo, ruta : rutaArchivo, idTramite : req.request.idTramite};
+            DocumentoDAO.crearDocumento(informacion);
 
             const { nombreArchivo, extension, idTramite } = req.request;
             const archivo = {
@@ -37,9 +44,9 @@ const subirArchivo = (req, res) => {
     }
 };
 
-const reMakeFile = (fileString, rutaArchivo, callback) => {
+const rehacerArchivo = (contenidoArchivo, rutaArchivo, callback) => {
     try {
-        fs.writeFile(rutaArchivo, fileString, (err) => {
+        fs.writeFile(rutaArchivo, contenidoArchivo, (err) => {
             if (err) {
                 return callback(err);
             }
@@ -50,13 +57,13 @@ const reMakeFile = (fileString, rutaArchivo, callback) => {
     }
 };
 
-const getFolderPath = (folderName) => {
+const obtenerFolderTramite = (nombreFolder) => {
     try {
-        const endFolderPath = path.resolve(__dirname, '../ProjectsFiles/' + folderName);
-        const res = endFolderPath;
+        const rutaFolderFinal = path.resolve(__dirname, '../ArchivosProyecto/' + nombreFolder);
+        const res = rutaFolderFinal;
     
-        if (!fs.existsSync(endFolderPath)) {
-            fs.mkdirSync(path.resolve(endFolderPath));     
+        if (!fs.existsSync(rutaFolderFinal)) {
+            fs.mkdirSync(path.resolve(rutaFolderFinal));     
         } 
     
         return res;
@@ -65,6 +72,27 @@ const getFolderPath = (folderName) => {
     }
 };
 
-const descargarArchivo = (req, res) => {}
+const descargarArchivo = async (req, res) => {
+        try {
+            const idArchivo = req.request.idDocumento;
+            console.log(idArchivo);
+            const rutaArchivo = await DocumentoDAO.obtenerRutaArchivo(idArchivo);
+    
+            if (!fs.existsSync(rutaArchivo)) {
+                throw new Error('Archivo no encontrado');
+            }
+
+            const datosArchivo = await readFileAsync(rutaArchivo);
+    
+            res(null, {contenido:datosArchivo});
+        } catch (err) {
+            console.error('Error inesperado:', err);
+            res({
+                code: grpc.status.UNKNOWN,
+                message: 'Error inesperado al descargar el archivo',
+            });
+        }
+};
+
 
 module.exports = {subirArchivo, descargarArchivo}

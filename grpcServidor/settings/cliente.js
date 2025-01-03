@@ -26,6 +26,7 @@ client.waitForReady(deadline, (err) => {
 
 function onClientReady(){
     const file = "./Prueba.txt";
+
     dividirArchivo(file, (err,data) => {
         if (err) {
             console.error(err);
@@ -34,12 +35,14 @@ function onClientReady(){
             const filename =  path.basename(file);
             let extension = path.extname(file);
 
-            client.subirArchivo({idTramite: 1, nombreArchivo: filename, extension: extension, contenido: data}, (err, result) =>{
+            client.subirArchivo({idTramite: 2, nombreArchivo: filename, extension: extension, contenido: data}, (err, result) =>{
                 if (err){
                     console.log(err);
                     return;
                 }
                 console.log(result);
+
+                probarDescargarArchivo();
             });
         }
     });
@@ -52,5 +55,30 @@ function dividirArchivo(rutaArchivo, callback) {
         }
 
         callback(null, data);
+    });
+}
+
+function probarDescargarArchivo() {
+    const idDocumento = 1; 
+    console.log('Solicitando archivo con idFile:', idDocumento);
+
+    client.descargarArchivo({ idDocumento }, (err, response) => {
+        if (err) {
+            console.error('Error al descargar el archivo:', err);
+            return;
+        }
+
+        console.log('Archivo descargado exitosamente.');
+
+        const rutaDescarga = path.join("C:", "Users", "nando", "Desktop", "DesPrueba"); 
+        
+        fs.writeFile(rutaDescarga, response.contenido, (err) => {
+            if (err) {
+                console.error('Error al guardar el archivo:', err);
+                return;
+            }
+
+            console.log('Archivo guardado en:', rutaDescarga);
+        });
     });
 }
