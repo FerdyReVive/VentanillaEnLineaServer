@@ -32,5 +32,24 @@ class UsuarioDAO {
         });
     }
 
+    static async validarUsuarioYContrasena(clave, contrasena) {
+        if (!clave || !contrasena) {
+            throw new Error('La clave y la contraseña son obligatorios');
+        }
+    
+        const usuarioEncontrado = await usuario.findOne({
+            where: {
+                clave: clave,
+                contrasena: contrasena,
+                estado: 1
+            }
+        });
+    
+        if (!usuarioEncontrado) {
+            throw new Error('Usuario o contraseña inválidos');
+        }
+    
+        return usuarioEncontrado;
+    }
 }
 module.exports = UsuarioDAO

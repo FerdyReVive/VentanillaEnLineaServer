@@ -1,23 +1,45 @@
 const jwt = require('jsonwebtoken');
 
-const validarToken = (req, res, next) => {
-  const token = req.headers['authorization'];
+const validarTokenUsuario = (tipoRol) => (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
-    return res.status(403).json({ message: 'Token no proporcionado' });
+  if (!authHeader) {
+      return res.status(401).json({ message: 'Token no proporcionado' });
   }
 
-  const tokenNuevo = token.startsWith('Bearer ') ? token.slice(7, token.length) : token;
+  const token = authHeader.split(' ')[1];
 
-  jwt.verify(tokenNuevo, 'DesarrolloSistemasEnRedUVTeamRocket', (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: 'Token inválido' });
-    }
-    
-    req.user = decoded;
-    next();
+  jwt.verify(token, 'DesarrolloSistemasEnRedUVTeamRocket', (err, decoded) => {
+      if (err) {
+          return res.status(403).json({ message: 'Token no válido' });
+      }
+
+      if (decoded.idTipoUsuario !== tipoRol) {
+          return res.status(403).json({ message: `El usuario con ID ${decoded.idUsuario} no tiene permiso para acceder a este recurso` });
+      }
+
+      req.user = decoded;
+      next();
   });
-  
 };
 
-module.exports = validarToken;
+const validarTokenUsuarioGeneral = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+      return res.status(401).json({ message: 'Token no proporcionado' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  jwt.verify(token, 'DesarrolloSistemasEnRedUVTeamRocket', (err, decoded) => {
+      if (err) {
+          return res.status(403).json({ message: 'Token no válido' });
+      }
+      
+      req.user = decoded;
+      next();
+  });
+};
+
+module.exports = {validarTokenUsuario, validarTokenUsuarioGeneral};

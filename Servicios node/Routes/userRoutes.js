@@ -1,11 +1,12 @@
 const {Router} = require('express');
-const validarToken = require('../middleware/validarToken');
+const {validarTokenUsuario, validarTokenUsuarioGeneral} = require('../middleware/validarToken');
 
 const {
     pruebaGetUsuarios,
     pruebaPost,
     pruebaPatch,
-    pruebaDelete
+    pruebaDelete,
+    validarUsuario
 } = require('../Controller/usuarioController');
 
 const {
@@ -25,20 +26,21 @@ const {
 
 const router = Router();
 
-router.post("/Usuario", validarToken ,pruebaPost);
-router.patch('/usuarios/:idUsuario', validarToken ,pruebaPatch);
-router.delete('/usuarios/:idUsuario', validarToken ,pruebaDelete);
-router.get('/usuarios/:idUsuario', validarToken, pruebaGetUsuarios);
+router.post("/Usuario", validarTokenUsuario("1") ,pruebaPost);
+router.patch('/usuarios/:idUsuario', validarTokenUsuario("1") ,pruebaPatch);
+router.delete('/usuarios/:idUsuario', validarTokenUsuario("1") ,pruebaDelete);
+router.get('/usuarios/:idUsuario', validarTokenUsuario("1"), pruebaGetUsuarios);
+router.post('/validar-usuario', validarTokenUsuarioGeneral, validarUsuario);
 
-router.post('/experiencias', pruebaPostExperiencia);
-router.patch('/experiencias/:idExperienciaEducativa', validarToken ,pruebaPatchExperiencia);
-router.delete('/experiencias/:idExperienciaEducativa', validarToken, pruebaDeleteExperiencia);
-router.get('/experiencias', validarToken, pruebaGetExperiencias);
-router.get('/experiencias/:idUsuario', validarToken, consultarExperienciasCompletasPorUsuario);
+router.post('/experiencias', validarTokenUsuario("1"), pruebaPostExperiencia);
+router.patch('/experiencias/:idExperienciaEducativa', validarTokenUsuario("1") ,pruebaPatchExperiencia);
+router.delete('/experiencias/:idExperienciaEducativa', validarTokenUsuario("1"), pruebaDeleteExperiencia);
+router.get('/experiencias', validarTokenUsuario("1"), pruebaGetExperiencias);
+router.get('/experiencias/:idUsuario', validarTokenUsuarioGeneral, consultarExperienciasCompletasPorUsuario);
 
-router.post('/tramites', validarToken, pruebaCrearTramite);
-router.patch('/tramites/:idTramite', validarToken, pruebaEditarEstadoTramite);
-router.get('/tramites/:estado', validarToken, pruebaConsultarTramitesPorEstado,
+router.post('/tramites', validarTokenUsuario("2"), pruebaCrearTramite);
+router.patch('/tramites/:idTramite', validarTokenUsuario("1"), pruebaEditarEstadoTramite);
+router.get('/tramites/:estado', validarTokenUsuarioGeneral, pruebaConsultarTramitesPorEstado,
 );
 
 module.exports = router;

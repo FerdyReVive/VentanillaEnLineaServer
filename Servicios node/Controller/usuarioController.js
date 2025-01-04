@@ -1,5 +1,6 @@
 //Usar este import para todos los controllers
 const {response} = require("express");
+const jwt = require('jsonwebtoken');
 const Usuario = require("../DTOs/Usuario");
 const UsuarioDAO = require("../DataAccessObjects/UsuarioDAO");
 
@@ -55,4 +56,43 @@ const pruebaGetUsuarios = async (req, res = response) => {
     }
 };
 
-module.exports = {pruebaGetUsuarios, pruebaPost, pruebaPatch, pruebaDelete}
+const validarUsuario = async (req, res) => {
+    const { clave, contrasena } = req.body;
+
+    try {
+        console.log(clave, "", contrasena)
+        const usuario = await UsuarioDAO.validarUsuarioYContrasena(clave, contrasena);
+
+        const token = generarTokenJWT(usuario.idUsuario, usuario.nombre, usuario.idTipoUsuario);
+        console.log(token);
+        res.status(200).json({
+            message: 'Token generado',
+            token
+        });
+    } catch (error) {
+        console.error('Error al validar usuario:', error.message);
+        res.status(400).json({ message: error.message });
+    }
+};
+
+const JWT_SECRET = 'DesarrolloSistemasEnRedUVTeamRocket';
+
+const generarTokenJWT = (idUsuario, nombre, idTipoUsuario) => {
+    if (!idUsuario || !nombre || !idTipoUsuario) {
+        throw new Error('Todos los campos (idUsuario, nombre, idTipoUsuario) son obligatorios');
+    }
+
+    const payload = {
+        idUsuario,
+        nombre,
+        idTipoUsuario
+    };
+
+    const token = jwt.sign(payload, JWT_SECRET, {
+        expiresIn: '1h'
+    });
+
+    return token;
+};
+
+module.exports = {pruebaGetUsuarios, pruebaPost, pruebaPatch, pruebaDelete, validarUsuario}
