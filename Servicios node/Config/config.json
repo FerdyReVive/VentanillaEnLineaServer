@@ -1,7 +1,7 @@
 {
     "development": {
-      "username": "usuarioproyectoRed",
-      "password": "contrasenia123",
+      "username": "VentanillaAdmin",
+      "password": "Contrasenia123",
       "database": "ventanillaenlinea",
       "host": "localhost",
       "dialect": "mysql",
