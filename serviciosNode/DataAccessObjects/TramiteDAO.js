@@ -1,5 +1,5 @@
 const { where } = require("sequelize");
-const { tramite } = require('../Models/index')
+const { tramite , usuario } = require('../Models/index')
 
 class TramiteDAO {
 
@@ -49,9 +49,9 @@ class TramiteDAO {
 
     static async consultarTramitesPorSecretario(idSecretario) {
         try {
-            const tramites = await Tramite.findAll({
+            const tramites = await tramite.findAll({
               include: [{
-                model: Usuario,
+                model: usuario,
                 as: 'usuario',
                 where: { idSecretarioAsignado: idSecretario }
               }]
