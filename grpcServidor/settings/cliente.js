@@ -81,4 +81,19 @@ function probarDescargarArchivo() {
             console.log('Archivo guardado en:', rutaDescarga);
         });
     });
+
+    client.generarKardex({ idUsuario: 5 }, (error, response) => {
+        if (error) {
+          console.error('Error:', error.message);
+        } else {
+          console.log(response.message);
+      
+          // Decodifica el archivo base64 y guárdalo localmente
+          const buffer = Buffer.from(response.file, 'base64');
+          const filePath = path.join(__dirname, `Kardex_Usuario1.docx`);
+      
+          fs.writeFileSync(filePath, buffer);
+          console.log(`Archivo descargado en: ${filePath}`);
+        }
+      })
 }
