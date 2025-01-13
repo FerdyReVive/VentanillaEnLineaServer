@@ -1,5 +1,6 @@
 
 FROM node AS build-env
+RUN mkdir ArchivosProyecto
 WORKDIR /app
 
 COPY . ./
