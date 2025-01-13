@@ -3,22 +3,22 @@
       "username": "VentanillaAdmin",
       "password": "Contrasenia123",
       "database": "ventanillaenlinea",
-      "host": "localhost",
+      "host": "172.16.0.8",
       "dialect": "mysql",
       "port": "3306"
     },
     "test": {
       "username": "root",
-      "password": "1234",
-      "database": "teamhub_db",
+      "password": "Contrasenia123",
+      "database": "ventanillaenlinea",
       "host": "172.16.0.8",
       "dialect": "mysql",
       "port": "3306"
     },
     "production": {
-      "username": "root",
-      "password": "1234",
-      "database": "teamhub_db",
+      "username": "usuarioproyectoRed",
+      "password": "contrasenia123",
+      "database": "ventanillaenlinea",
       "host": "172.16.0.8",
       "dialect": "mysql",
       "port": "3306"
