@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('usuario', {
+module.exports = function (sequelize, DataTypes) {
+  const Usuario = sequelize.define('usuario', {
     idUsuario: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -49,25 +49,25 @@ module.exports = function(sequelize, DataTypes) {
         name: "PRIMARY",
         unique: true,
         using: "BTREE",
-        fields: [
-          { name: "idUsuario" },
-        ]
+        fields: [{ name: "idUsuario" }]
       },
       {
         name: "correo",
         unique: true,
         using: "BTREE",
-        fields: [
-          { name: "correo" },
-        ]
+        fields: [{ name: "correo" }]
       },
       {
         name: "idTipoUsuario",
         using: "BTREE",
-        fields: [
-          { name: "idTipoUsuario" },
-        ]
-      },
+        fields: [{ name: "idTipoUsuario" }]
+      }
     ]
   });
+
+  Usuario.associate = function (models) {
+    Usuario.hasMany(models.tramite, { foreignKey: 'idUsuario', as: 'tramites' });
+  };
+
+  return Usuario;
 };

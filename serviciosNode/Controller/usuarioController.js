@@ -1,4 +1,3 @@
-//Usar este import para todos los controllers
 const {response} = require("express");
 const jwt = require('jsonwebtoken');
 const Usuario = require("../DTOs/Usuario");

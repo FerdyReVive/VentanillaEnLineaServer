@@ -1,17 +1,29 @@
-const DocumentoDAO = require('../dao/DocumentoDAO');
+const DocumentoDAO = require('../DataAccesObjects/DocumentoDAO');
 
-const pruebaObtenerRutaArchivo = async (req, res) => {
-    try {
-        const { idArchivo } = req.params;
+const DocumentoController = {
+    async crearDocumento(req, res) {
+        try {
+            const { nombre, ruta, idTramite } = req.body;
 
+            if (!nombre || !ruta || !idTramite) {
+                return res.status(400).json({
+                    message: 'Todos los campos (nombre, ruta, idTramite) son obligatorios',
+                });
+            }
 
-        const ruta = await DocumentoDAO.obtenerRutaArchivo({ idArchivo });
+            const nuevoDocumento = await DocumentoDAO.crearDocumento({ nombre, ruta, idTramite });
 
-        res.status(200).json({ ruta });
-    } catch (error) {
-        console.error('Error al obtener la ruta del archivo:', error.message);
-        res.status(500).json({ message: error.message });
-    }
+            return res.status(201).json({
+                message: 'Documento creado exitosamente',
+                data: nuevoDocumento,
+            });
+        } catch (error) {
+            console.error('Error en crearDocumento (Controller):', error.message);
+            return res.status(500).json({
+                message: 'Error al crear el documento',
+            });
+        }
+    },
 };
 
-module.exports = { pruebaObtenerRutaArchivo };
+module.exports = DocumentoController;

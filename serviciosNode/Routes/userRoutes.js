@@ -20,7 +20,8 @@ const {
 const {
     pruebaCrearTramite,
     pruebaEditarEstadoTramite,
-    pruebaConsultarTramitesPorEstado,
+    pruebaConsultarTramitesPorUsuario,
+    pruebaConsultarTramitesPorSecretario
 } = require('../Controller/tramiteController');
 
 
@@ -30,7 +31,7 @@ router.post("/Usuario", validarTokenUsuario("1") ,pruebaPost);
 router.patch('/usuarios/:idUsuario', validarTokenUsuario("1") ,pruebaPatch);
 router.delete('/usuarios/:idUsuario', validarTokenUsuario("1") ,pruebaDelete);
 router.get('/usuarios/:idUsuario', validarTokenUsuario("1"), pruebaGetUsuarios);
-router.post('/validar-usuario', validarTokenUsuarioGeneral, validarUsuario);
+router.post('/validar-usuario', validarUsuario);
 
 router.post('/experiencias', validarTokenUsuario("1"), pruebaPostExperiencia);
 router.patch('/experiencias/:idExperienciaEducativa', validarTokenUsuario("1") ,pruebaPatchExperiencia);
@@ -40,7 +41,7 @@ router.get('/experiencias/:idUsuario', validarTokenUsuarioGeneral, consultarExpe
 
 router.post('/tramites', validarTokenUsuario("2"), pruebaCrearTramite);
 router.patch('/tramites/:idTramite', validarTokenUsuario("1"), pruebaEditarEstadoTramite);
-router.get('/tramites/:estado', validarTokenUsuarioGeneral, pruebaConsultarTramitesPorEstado,
-);
+router.get('/tramites/:idUsuario', validarTokenUsuario("2"), pruebaConsultarTramitesPorUsuario);
+router.get('/tramites/secretario/:idSecretarioAsignado', validarTokenUsuario("1"), pruebaConsultarTramitesPorSecretario);
 
 module.exports = router;
