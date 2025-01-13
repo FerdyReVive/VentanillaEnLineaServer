@@ -1,0 +1,12 @@
+
+FROM node AS build-env
+WORKDIR /app
+
+COPY . ./
+
+RUN npm install
+
+FROM node
+WORKDIR /app
+COPY --from=build-env /app/ .
+ENTRYPOINT [ "node", "app.js"]
