@@ -36,15 +36,30 @@ class TramiteDAO {
         }
     }
 
-    static async consultarTramitesPorEstado(estado) {
+    static async consultarTramitesPorEstudiante(idUsuario) {
         try {
             const tramites = await tramite.findAll({
-                where: { estado }
+                where: { idUsuario }
             });
             return tramites;
         } catch (error) {
-            throw new Error('Error al consultar trámites por estado: ' + error.message);
+            throw new Error('Error al consultar trámites por usuario: ' + error.message);
         }
+    }
+
+    static async consultarTramitesPorSecretario(idSecretario) {
+        try {
+            const tramites = await Tramite.findAll({
+              include: [{
+                model: Usuario,
+                as: 'usuario',
+                where: { idSecretarioAsignado: idSecretario }
+              }]
+            });
+            return tramites;
+          } catch (error) {
+            throw new Error('Error al consultar trámites por secretario: ' + error.message);
+          }
     }
     
 }

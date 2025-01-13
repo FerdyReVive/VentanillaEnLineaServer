@@ -1,5 +1,5 @@
 const {response} = require("express");
-const Tramite = require("../DTOs/Tramite");
+const { usuario, tramite } = require('../Models');
 const TramiteDAO = require("../DataAccessObjects/TramiteDAO");
 
 const pruebaCrearTramite = async (req, res) => {
@@ -39,22 +39,50 @@ const pruebaEditarEstadoTramite = async (req, res) => {
     }
 };
 
-const pruebaConsultarTramitesPorEstado = async (req, res) => {
-    const { estado } = req.params;
+const pruebaConsultarTramitesPorUsuario = async (req, res) => {
+    const { idUsuario } = req.params;
 
-    console.log(`Consultando trámites con estado: ${estado}`);
+    console.log(`Consultando trámites para el usuario con ID: ${idUsuario}`);
 
     try {
-        if (estado === undefined) {
-            return res.status(400).json({ message: 'El estado es obligatorio' });
+        if (!idUsuario) {
+            return res.status(400).json({ message: 'El idUsuario es obligatorio' });
         }
 
-        const tramites = await TramiteDAO.consultarTramitesPorEstado(estado);
+        const tramites = await TramiteDAO.consultarTramitesPorEstudiante(idUsuario);
+        
+        if (tramites.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron trámites para este usuario' });
+        }
+
         res.status(200).json(tramites);
     } catch (error) {
-        console.error('Error al consultar trámites por estado:', error.message);
-        res.status(500).json({ message: 'Error al consultar trámites por estado' });
+        console.error('Error al consultar trámites por usuario:', error.message);
+        res.status(500).json({ message: 'Error al consultar trámites por usuario' });
     }
 };
 
-module.exports = {pruebaCrearTramite, pruebaEditarEstadoTramite, pruebaConsultarTramitesPorEstado}
+    const pruebaConsultarTramitesPorSecretario = async (req, res) => {
+        const { idSecretarioAsignado } = req.params;
+
+        console.log(`Consultando trámites asignados al secretario con ID: ${idSecretarioAsignado}`);
+
+        try {
+            if (!idSecretarioAsignado) {
+            return res.status(400).json({ message: 'El idSecretario es obligatorio' });
+            }
+
+            const tramites = await TramiteDAO.consultarTramitesPorSecretario(idSecretarioAsignado);
+
+            if (tramites.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron trámites asignados a este secretario' });
+            }
+
+            res.status(200).json(tramites);
+        } catch (error) {
+            console.error('Error al consultar trámites por secretario:', error.message);
+            res.status(500).json({ message: 'Error al consultar trámites por secretario' });
+        }
+    };
+
+module.exports = {pruebaCrearTramite, pruebaEditarEstadoTramite, pruebaConsultarTramitesPorUsuario, pruebaConsultarTramitesPorSecretario}

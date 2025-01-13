@@ -20,7 +20,8 @@ const {
 const {
     pruebaCrearTramite,
     pruebaEditarEstadoTramite,
-    pruebaConsultarTramitesPorEstado,
+    pruebaConsultarTramitesPorUsuario,
+    pruebaConsultarTramitesPorSecretario
 } = require('../Controller/tramiteController');
 
 
@@ -40,7 +41,7 @@ router.get('/experiencias/:idUsuario', validarTokenUsuarioGeneral, consultarExpe
 
 router.post('/tramites', validarTokenUsuario("2"), pruebaCrearTramite);
 router.patch('/tramites/:idTramite', validarTokenUsuario("1"), pruebaEditarEstadoTramite);
-router.get('/tramites/:estado', validarTokenUsuarioGeneral, pruebaConsultarTramitesPorEstado,
-);
+router.get('/tramites/:idUsuario', validarTokenUsuario("2"), pruebaConsultarTramitesPorUsuario);
+router.get('/tramites/secretario/:idSecretarioAsignado', validarTokenUsuario("1"), pruebaConsultarTramitesPorSecretario);
 
 module.exports = router;
