@@ -3,13 +3,45 @@ const jwt = require('jsonwebtoken');
 const Usuario = require("../DTOs/Usuario");
 const UsuarioDAO = require("../DataAccessObjects/UsuarioDAO");
 
-const pruebaPost = async (req,res = response) => {
-    const {nombre, clave, correo, contrasena, idTipoUsuario} = req.body;
-    console.log(nombre, clave, correo, contrasena);
-    const usuario = {nombre, clave, correo, contrasena, idTipoUsuario};
-    await UsuarioDAO.crearUsuario(usuario);
-    res.status(200).json({ message: 'Se registró'});
-}
+const pruebaPost = async (req, res = response) => {
+    try {
+        const { nombre, clave, correo, contrasena, idTipoUsuario, idSecretarioAsignado, estado } = req.body;
+
+        if (!nombre || !clave || !correo || !contrasena || !idTipoUsuario || !idSecretarioAsignado || estado === undefined) {
+            return res.status(400).json({
+                message: 'Todos los campos son obligatorios (nombre, clave, correo, contrasena, idTipoUsuario, idSecretarioAsignado, estado)',
+            });
+        }
+
+        const nuevoUsuario = await UsuarioDAO.crearUsuario({
+            nombre,
+            clave,
+            correo,
+            contrasena,
+            idTipoUsuario,
+            idSecretarioAsignado,
+            estado
+        });
+
+        return res.status(201).json({
+            message: "Usuario registrado exitosamente"
+        });
+    } catch (error) {
+        console.error('Error en pruebaPost:', error.message);
+
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({
+                message: 'El correo ya está en uso. Por favor, utiliza uno diferente.',
+                error: error.message,
+            });
+        }
+
+        return res.status(500).json({
+            message: 'Error al registrar el usuario',
+            error: error.message,
+        });
+    }
+};
 
 const pruebaPatch = async (req,res = response) => {
     const { idUsuario } = req.params;
@@ -74,6 +106,27 @@ const validarUsuario = async (req, res) => {
     }
 };
 
+const obtenerUsuario = async (req, res) => {
+    const { idUsuario } = req.params;
+
+    console.log(`Obteniendo información del usuario con ID: ${idUsuario}`);
+    try {
+        if (!idUsuario) {
+            return res.status(400).json({ message: 'El ID del usuario es obligatorio' });
+        }
+
+        const usuarioInfo = await UsuarioDAO.obtenerInformacionUsuario(idUsuario);
+
+        return res.status(200).json({
+            message: 'Información del usuario obtenida exitosamente',
+            data: usuarioInfo,
+        });
+    } catch (error) {
+        console.error('Error al obtener información del usuario:', error.message);
+        res.status(500).json({ message: 'Error al obtener información del usuario' });
+    }
+};
+
 const JWT_SECRET = 'DesarrolloSistemasEnRedUVTeamRocket';
 
 const generarTokenJWT = (idUsuario, nombre, idTipoUsuario) => {
@@ -94,4 +147,4 @@ const generarTokenJWT = (idUsuario, nombre, idTipoUsuario) => {
     return token;
 };
 
-module.exports = {pruebaGetUsuarios, pruebaPost, pruebaPatch, pruebaDelete, validarUsuario}
+module.exports = {pruebaGetUsuarios, pruebaPost, pruebaPatch, pruebaDelete, validarUsuario, obtenerUsuario}
