@@ -23,10 +23,6 @@ class UsuarioDAO {
                 throw new Error('El ID del usuario es obligatorio');
             }
 
-            if (!usuarioAux || Object.keys(usuarioAux).length === 0) {
-                throw new Error('No hay datos para actualizar');
-            }
-
             const [rowsUpdated] = await usuario.update(usuarioAux, {
                 where: { idUsuario: idUsuario }
             });

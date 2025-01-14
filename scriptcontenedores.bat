@@ -15,7 +15,7 @@ cd ..\basededatos
 docker build -t ventanillaenlinea_bd .
 IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
 
-REM Ejecutar docker-compose build y docker-compose up
+REM 
 docker-compose build
 IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
 docker-compose up

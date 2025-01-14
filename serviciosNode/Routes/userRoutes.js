@@ -30,7 +30,7 @@ const router = Router();
 
 router.post("/Usuario", validarTokenUsuario(1) ,pruebaPost);
 router.patch('/usuarios/:idUsuario', validarTokenUsuario(1) ,pruebaPatch);
-router.delete('/usuarios/:idUsuario', validarTokenUsuario(1) ,pruebaDelete);
+router.patch('/estausuarios/:idUsuario', validarTokenUsuario(1) ,pruebaDelete);
 router.get('/usuarios/:idUsuario', validarTokenUsuario(1), pruebaGetUsuarios);
 router.get('/usuario/:idUsuario', validarTokenUsuario(1), obtenerUsuario);
 router.post('/validar-usuario', validarUsuario);
