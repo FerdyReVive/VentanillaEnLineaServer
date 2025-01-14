@@ -45,10 +45,10 @@ const pruebaPost = async (req, res = response) => {
 
 const pruebaPatch = async (req,res = response) => {
     const { idUsuario } = req.params;
-    const { nombre, clave, correo, contrasena, idTipoUsuario } = req.body;
+    const { nombre, clave, correo, contrasena, idTipoUsuario, idSecretarioAsignado, estado } = req.body;
     console.log(`Editando usuario con ID: ${idUsuario}`);
     console.log({ nombre, clave, correo, contrasena, idTipoUsuario });
-    const usuarioAux = { nombre, clave, correo, contrasena, idTipoUsuario };
+    const usuarioAux = { nombre, clave, correo, contrasena, idTipoUsuario, idSecretarioAsignado, estado };
     try {
         await UsuarioDAO.editarUsuario(idUsuario, usuarioAux);
         res.status(200).json({ message: 'Usuario editado correctamente' });
