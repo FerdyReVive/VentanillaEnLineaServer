@@ -5,8 +5,8 @@ const { usuario } = require('../Models/index')
 class UsuarioDAO {
     static async crearUsuario(usuarioAux) {
         try {
-            if (!usuarioAux || !usuarioAux.nombre || !usuarioAux.email) {
-                throw new Error('Los campos obligatorios (nombre, email) deben estar presentes');
+            if (!usuarioAux ) {
+                throw new Error('Los campos obligatorios deben estar presentes');
             }
 
             const nuevoUsuario = await usuario.create(usuarioAux);
@@ -25,10 +25,6 @@ class UsuarioDAO {
 
             if (!usuarioAux || Object.keys(usuarioAux).length === 0) {
                 throw new Error('No hay datos para actualizar');
-            }
-
-            if (usuarioAux.email) {
-                usuarioAux.email = usuarioAux.email.trim().toLowerCase();
             }
 
             const [rowsUpdated] = await usuario.update(usuarioAux, {

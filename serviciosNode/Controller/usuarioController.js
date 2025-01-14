@@ -3,13 +3,46 @@ const jwt = require('jsonwebtoken');
 const Usuario = require("../DTOs/Usuario");
 const UsuarioDAO = require("../DataAccessObjects/UsuarioDAO");
 
-const pruebaPost = async (req,res = response) => {
-    const {nombre, clave, correo, contrasena, idTipoUsuario} = req.body;
-    console.log(nombre, clave, correo, contrasena);
-    const usuario = {nombre, clave, correo, contrasena, idTipoUsuario};
-    await UsuarioDAO.crearUsuario(usuario);
-    res.status(200).json({ message: 'Se registró'});
-}
+const pruebaPost = async (req, res = response) => {
+    try {
+        const { nombre, clave, correo, contrasena, idTipoUsuario, idSecretarioAsignado, estado } = req.body;
+
+        if (!nombre || !clave || !correo || !contrasena || !idTipoUsuario || !idSecretarioAsignado || estado === undefined) {
+            return res.status(400).json({
+                message: 'Todos los campos son obligatorios (nombre, clave, correo, contrasena, idTipoUsuario, idSecretarioAsignado, estado)',
+            });
+        }
+
+        const nuevoUsuario = await UsuarioDAO.crearUsuario({
+            nombre,
+            clave,
+            correo,
+            contrasena,
+            idTipoUsuario,
+            idSecretarioAsignado,
+            estado
+        });
+
+        return res.status(201).json({
+            message: 'Usuario registrado exitosamente',
+            data: nuevoUsuario,
+        });
+    } catch (error) {
+        console.error('Error en pruebaPost:', error.message);
+
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({
+                message: 'El correo ya está en uso. Por favor, utiliza uno diferente.',
+                error: error.message,
+            });
+        }
+
+        return res.status(500).json({
+            message: 'Error al registrar el usuario',
+            error: error.message,
+        });
+    }
+};
 
 const pruebaPatch = async (req,res = response) => {
     const { idUsuario } = req.params;
