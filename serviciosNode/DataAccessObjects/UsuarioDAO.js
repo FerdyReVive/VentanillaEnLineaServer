@@ -77,6 +77,27 @@ class UsuarioDAO {
         });
     }
 
+    static async obtenerInformacionUsuario(idUsuario) {
+        try {
+            if (!idUsuario) {
+                throw new Error('El ID del usuario es obligatorio');
+            }
+    
+            const usuarioInfo = await usuario.findOne({
+                where: { idUsuario: idUsuario },
+            });
+    
+            if (!usuarioInfo) {
+                throw new Error(`No se encontró un usuario con el ID ${idUsuario}`);
+            }
+    
+            return usuarioInfo;
+        } catch (error) {
+            console.error('Error al obtener información del usuario:', error.message);
+            throw new Error('Error al obtener información del usuario');
+        }
+    }
+
     static async validarUsuarioYContrasena(clave, contrasena) {
         if (!clave || !contrasena) {
             throw new Error('La clave y la contraseña son obligatorios');

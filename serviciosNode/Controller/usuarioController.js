@@ -24,8 +24,7 @@ const pruebaPost = async (req, res = response) => {
         });
 
         return res.status(201).json({
-            message: 'Usuario registrado exitosamente',
-            data: nuevoUsuario,
+            message: "Usuario registrado exitosamente"
         });
     } catch (error) {
         console.error('Error en pruebaPost:', error.message);
@@ -107,6 +106,27 @@ const validarUsuario = async (req, res) => {
     }
 };
 
+const obtenerUsuario = async (req, res) => {
+    const { idUsuario } = req.params;
+
+    console.log(`Obteniendo información del usuario con ID: ${idUsuario}`);
+    try {
+        if (!idUsuario) {
+            return res.status(400).json({ message: 'El ID del usuario es obligatorio' });
+        }
+
+        const usuarioInfo = await UsuarioDAO.obtenerInformacionUsuario(idUsuario);
+
+        return res.status(200).json({
+            message: 'Información del usuario obtenida exitosamente',
+            data: usuarioInfo,
+        });
+    } catch (error) {
+        console.error('Error al obtener información del usuario:', error.message);
+        res.status(500).json({ message: 'Error al obtener información del usuario' });
+    }
+};
+
 const JWT_SECRET = 'DesarrolloSistemasEnRedUVTeamRocket';
 
 const generarTokenJWT = (idUsuario, nombre, idTipoUsuario) => {
@@ -127,4 +147,4 @@ const generarTokenJWT = (idUsuario, nombre, idTipoUsuario) => {
     return token;
 };
 
-module.exports = {pruebaGetUsuarios, pruebaPost, pruebaPatch, pruebaDelete, validarUsuario}
+module.exports = {pruebaGetUsuarios, pruebaPost, pruebaPatch, pruebaDelete, validarUsuario, obtenerUsuario}
