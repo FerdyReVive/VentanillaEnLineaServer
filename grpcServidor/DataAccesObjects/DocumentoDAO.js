@@ -45,6 +45,22 @@ class DocumentoDAO {
         }
     }
 
+    static async obtenerDocumentosPorTramite(idTramite) {
+        try {
+            if (!idTramite) {
+                throw new Error('El campo idTramite es obligatorio');
+            }
+            
+            const documentos = await documento.findAll({
+                where: { idTramite },
+            });
+    
+            return documentos;
+        } catch (error) {
+            console.error('Error al obtener documentos por idTramite:', error.message);
+            throw new Error('Error al obtener los documentos');
+        }
+    }
 
 }
 

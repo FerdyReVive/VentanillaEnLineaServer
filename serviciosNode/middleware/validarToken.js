@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const validarTokenUsuario = (tipoRol) => (req, res, next) => {
   const authHeader = req.headers.authorization;
-
+console.log(tipoRol);
   if (!authHeader) {
       return res.status(401).json({ message: 'Token no proporcionado' });
   }
@@ -42,4 +42,4 @@ const validarTokenUsuarioGeneral = (req, res, next) => {
   });
 };
 
-module.exports = {validarTokenUsuario, validarTokenUsuarioGeneral};
+module.exports = {validarTokenUsuario, validarTokenUsuarioGeneral};
