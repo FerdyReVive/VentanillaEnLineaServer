@@ -3,20 +3,65 @@ const { usuario } = require('../Models/index')
 
 
 class UsuarioDAO {
-    static async crearUsuario(usuarioAux){
-        return await usuario.create(usuarioAux);
+    static async crearUsuario(usuarioAux) {
+        try {
+            if (!usuarioAux ) {
+                throw new Error('Los campos obligatorios deben estar presentes');
+            }
+
+            const nuevoUsuario = await usuario.create(usuarioAux);
+            return nuevoUsuario;
+        } catch (error) {
+            console.error('Error al crear usuario:', error.message);
+            throw new Error('Error al crear el usuario');
+        }
     }
 
     static async editarUsuario(idUsuario, usuarioAux) {
-        return await usuario.update(usuarioAux, {
-            where: { idUsuario: idUsuario }
-        });
+        try {
+            if (!idUsuario) {
+                throw new Error('El ID del usuario es obligatorio');
+            }
+
+            if (!usuarioAux || Object.keys(usuarioAux).length === 0) {
+                throw new Error('No hay datos para actualizar');
+            }
+
+            const [rowsUpdated] = await usuario.update(usuarioAux, {
+                where: { idUsuario: idUsuario }
+            });
+
+            if (rowsUpdated === 0) {
+                throw new Error(`No se encontró un usuario con el ID ${idUsuario}`);
+            }
+
+            return { message: 'Usuario actualizado correctamente' };
+        } catch (error) {
+            console.error('Error al editar usuario:', error.message);
+            throw new Error('Error al editar el usuario');
+        }
     }
 
     static async eliminarUsuario(idUsuario) {
-        return await usuario.destroy({
-            where: { idUsuario: idUsuario }
-        });
+        try {
+            if (!idUsuario) {
+                throw new Error('El ID del usuario es obligatorio');
+            }
+            const [rowsUpdated] = await usuario.update(
+                { estado: 0 },
+                {
+                    where: { idUsuario: idUsuario }
+                }
+            );
+            if (rowsUpdated === 0) {
+                throw new Error(`No se encontró un usuario con el ID ${idUsuario}`);
+            }
+    
+            return { message: 'Usuario eliminado (estado cambiado a 0) correctamente' };
+        } catch (error) {
+            console.error('Error al cambiar el estado del usuario:', error.message);
+            throw new Error('Error al eliminar el usuario');
+        }
     }
 
     static async consultarUsuariosPorSecretario(idSecretario) {
@@ -30,6 +75,27 @@ class UsuarioDAO {
                 estado: 1 
             }
         });
+    }
+
+    static async obtenerInformacionUsuario(idUsuario) {
+        try {
+            if (!idUsuario) {
+                throw new Error('El ID del usuario es obligatorio');
+            }
+    
+            const usuarioInfo = await usuario.findOne({
+                where: { idUsuario: idUsuario },
+            });
+    
+            if (!usuarioInfo) {
+                throw new Error(`No se encontró un usuario con el ID ${idUsuario}`);
+            }
+    
+            return usuarioInfo;
+        } catch (error) {
+            console.error('Error al obtener información del usuario:', error.message);
+            throw new Error('Error al obtener información del usuario');
+        }
     }
 
     static async validarUsuarioYContrasena(clave, contrasena) {
