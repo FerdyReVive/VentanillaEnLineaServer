@@ -5,8 +5,6 @@ const path = require('path');
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
-// Importa los controladores
-const { GenerarReporteKardex } = require('../controllers/reporteController');
 const { subirArchivo, descargarArchivo } = require('../controllers/tramitesgrpcController');
 
 class servidorgrpc {
@@ -34,8 +32,7 @@ class servidorgrpc {
         const server = new grpc.Server();
         server.addService(this.tramitespackage.filemanagement.service, {
             subirArchivo,
-            descargarArchivo,
-            generarKardex: GenerarReporteKardex,
+            descargarArchivo
         });
 
         return server;
