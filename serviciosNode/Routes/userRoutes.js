@@ -22,7 +22,8 @@ const {
     pruebaCrearTramite,
     pruebaEditarEstadoTramite,
     pruebaConsultarTramitesPorUsuario,
-    pruebaConsultarTramitesPorSecretario
+    pruebaConsultarTramitesPorSecretario,
+    pruebaConsultarDocumentosPorTramite
 } = require('../Controller/tramiteController');
 
 
@@ -44,5 +45,6 @@ router.post('/tramites', validarTokenUsuario(2), pruebaCrearTramite);
 router.patch('/tramites/:idTramite', validarTokenUsuario(1), pruebaEditarEstadoTramite);
 router.get('/tramites/:idUsuario', validarTokenUsuario(2), pruebaConsultarTramitesPorUsuario);
 router.get('/tramites/secretario/:idSecretarioAsignado', validarTokenUsuario(1), pruebaConsultarTramitesPorSecretario);
+router.get('/documentos/:idTramite', validarTokenUsuario(1), pruebaConsultarDocumentosPorTramite);
 
 module.exports = router;

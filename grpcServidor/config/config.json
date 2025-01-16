@@ -1,6 +1,6 @@
 {
     "development": {
-      "username": "root",
+      "username": "VentanillaAdmin",
       "password": "Contrasenia123",
       "database": "ventanillaenlinea",
       "host": "172.16.0.8",
