@@ -126,4 +126,4 @@ const generarTokenJWT = (idUsuario, nombre, idTipoUsuario) => {
     return token;
 };
 
-module.exports = {pruebaGetUsuarios, pruebaPost, pruebaPatch, pruebaDelete, validarUsuario, obtenerUsuario}
+module.exports = {pruebaGetUsuarios, pruebaPost, pruebaPatch, pruebaDelete, validarUsuario}
