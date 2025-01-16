@@ -5,7 +5,7 @@ package tramitespackage;
 service filemanagement {
     rpc subirArchivo(subirArchivoPeticion) returns (subirArchivoRespuesta) {};
     rpc descargarArchivo(descargarArchivoPeticion) returns (descargarArchivoRespuesta) {};
-    rpc generarKardex (reporteSolicitud) returns (reporteRespuesta);
+    rpc generarDocumento  (reporteSolicitud) returns (reporteRespuesta);
 }
 
 message subirArchivoPeticion {
@@ -32,6 +32,6 @@ message reporteSolicitud {
 }
 
 message reporteRespuesta {
-  string message = 1;
+  string contenido = 1;
   bytes file = 2; 
 }

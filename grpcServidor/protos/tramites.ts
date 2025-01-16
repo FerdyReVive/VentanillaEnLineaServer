@@ -12,6 +12,8 @@ export interface ProtoGrpcType {
     descargarArchivoPeticion: MessageTypeDefinition
     descargarArchivoRespuesta: MessageTypeDefinition
     filemanagement: SubtypeConstructor<typeof grpc.Client, _tramitespackage_filemanagementClient> & { service: _tramitespackage_filemanagementDefinition }
+    reporteRespuesta: MessageTypeDefinition
+    reporteSolicitud: MessageTypeDefinition
     subirArchivoPeticion: MessageTypeDefinition
     subirArchivoRespuesta: MessageTypeDefinition
   }

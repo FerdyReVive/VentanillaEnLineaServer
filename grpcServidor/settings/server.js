@@ -6,6 +6,7 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
 const { subirArchivo, descargarArchivo } = require('../controllers/tramitesgrpcController');
+const { generarReporte } = require('../controllers/reporteController');
 
 class servidorgrpc {
     constructor() {
@@ -32,7 +33,8 @@ class servidorgrpc {
         const server = new grpc.Server();
         server.addService(this.tramitespackage.filemanagement.service, {
             subirArchivo,
-            descargarArchivo
+            descargarArchivo,
+            generarReporte
         });
 
         return server;

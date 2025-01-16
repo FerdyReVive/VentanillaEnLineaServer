@@ -1,4 +1,4 @@
-// Original file: protos/tramites.proto
+// Original file: tramites.proto
 
 
 export interface descargarArchivoRespuesta {

@@ -3,6 +3,9 @@ const grpc = require('@grpc/grpc-js')
 const protoLoader = require('@grpc/proto-loader');
 const { error } = require('console');
 const fs = require('fs');
+const { generateDocument } = require('../helpers/WordHelper');
+
+
 
 const PORT = 8081;
 const PROTO_FILE = '../protos/tramites.proto';
@@ -81,19 +84,30 @@ function probarDescargarArchivo() {
             console.log('Archivo guardado en:', rutaDescarga);
         });
     });
+    probarGenerarDocumento();
+}
 
-    client.generarKardex({ idUsuario: 5 }, (error, response) => {
-        if (error) {
-          console.error('Error:', error.message);
-        } else {
-          console.log(response.message);
-      
-          // Decodifica el archivo base64 y guárdalo localmente
-          const buffer = Buffer.from(response.file, 'base64');
-          const filePath = path.join(__dirname, `Kardex_Usuario1.docx`);
-      
-          fs.writeFileSync(filePath, buffer);
-          console.log(`Archivo descargado en: ${filePath}`);
+function probarGenerarDocumento() {
+    const idUsuario = 6; // ID del usuario para el que queremos generar el documento
+    console.log('Solicitando generación de documento para idUsuario:', idUsuario);
+
+    client.generarDocumento({ idUsuario }, (err, response) => {
+        if (err) {
+            console.error('Error al generar el documento:', err);
+            return;
         }
-      })
+
+        console.log('Documento generado exitosamente.');
+
+        const rutaDescarga = path.join("C:", "Users", "nando", "Desktop", "KardexGenerado.docx");
+        
+        fs.writeFile(rutaDescarga, response.contenido, (err) => {
+            if (err) {
+                console.error('Error al guardar el archivo:', err);
+                return;
+            }
+
+            console.log('Documento guardado en:', rutaDescarga);
+        });
+    });
 }
