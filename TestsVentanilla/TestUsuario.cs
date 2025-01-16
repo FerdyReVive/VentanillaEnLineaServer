@@ -16,19 +16,19 @@ public class TestUsuario
         cliente = new HttpClient();
         cliente.BaseAddress = new Uri("http://192.168.1.20:8080/");
         cliente.DefaultRequestHeaders.Authorization = 
-            new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzdWFyaW8iOjUsIm5vbWJyZSI6ImZlcm5hbmRvIiwiaWRUaXBvVXN1YXJpbyI6MSwiaWF0IjoxNzM2OTgxMjMwLCJleHAiOjE3MzY5ODQ4MzB9.dnlHm1pwelubjCMVjEv5Jx3MNnG3JVjcEHDqxQl46cI");
+            new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzdWFyaW8iOjUsIm5vbWJyZSI6ImZlciIsImlkVGlwb1VzdWFyaW8iOjEsImlhdCI6MTczNjk5ODk4NCwiZXhwIjoxNzM3MDAyNTg0fQ.9BTrnZqsPRn-A5PeN4xnHlP8-R4ozNK7lcz2kx-JKI8");
         cliente.DefaultRequestHeaders.Add("accept", "application/json");
     }
 
-    /*[Fact]
+    [Fact]
     public async Task pruebaCrearUsuarioExitosa()
     {
         var usuarioValido = new
         {
             nombre = "Alesi",
-            clave = "clave12345",
-            correo = "alesi@example.com",
-            contrasena = "password",
+            clave = "clave5",
+            correo = "alesi66@example.com",
+            contrasena = "contra",
             idTipoUsuario = 2,
             idSecretarioAsignado = 5,
             estado = 1
@@ -49,9 +49,9 @@ public class TestUsuario
     {
         var usuarioValido = new
         {
-            nombre = "Ales",
+            nombre = "Alesos",
             clave = "clave1234",
-            correo = "ales@example.com",
+            correo = "Alesos@example.com",
             idTipoUsuario = 2,
             idSecretarioAsignado = 5,
             estado = 1
@@ -79,7 +79,7 @@ public class TestUsuario
             estado = 1
         };
 
-        int idUsuario = 16;
+        int idUsuario = 8;
 
         var json = System.Text.Json.JsonSerializer.Serialize(usuarioEditado);
         var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
@@ -131,7 +131,7 @@ public class TestUsuario
             estado = 0
         };
 
-        int idUsuario = 13;
+        int idUsuario = 8;
         try
         {
             var json = System.Text.Json.JsonSerializer.Serialize(usuarioEditado);
@@ -277,6 +277,6 @@ public class TestUsuario
             Console.WriteLine($"Error al realizar la solicitud: {ex.Message}");
             throw;
         }
-    }*/
+    }
 
 }
