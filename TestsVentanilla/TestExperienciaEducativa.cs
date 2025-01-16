@@ -9,23 +9,23 @@ namespace TestsVentanilla;
 
 public class TestExperienciaEducativa()
 {
-    /*private static readonly HttpClient cliente;
+    private static readonly HttpClient cliente;
 
     static TestExperienciaEducativa()
     {
         cliente = new HttpClient();
         cliente.BaseAddress = new Uri("http://192.168.1.20:8080/");
         cliente.DefaultRequestHeaders.Authorization = 
-            new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzdWFyaW8iOjUsIm5vbWJyZSI6ImZlcm5hbmRvIiwiaWRUaXBvVXN1YXJpbyI6MSwiaWF0IjoxNzM2OTg1NjE1LCJleHAiOjE3MzY5ODkyMTV9.XVD-T2ZwWT-_9iC20KFh2hKR9UIRUpCsWUF3Wu9P2ko");
+            new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzdWFyaW8iOjUsIm5vbWJyZSI6ImZlciIsImlkVGlwb1VzdWFyaW8iOjEsImlhdCI6MTczNjk5ODk4NCwiZXhwIjoxNzM3MDAyNTg0fQ.9BTrnZqsPRn-A5PeN4xnHlP8-R4ozNK7lcz2kx-JKI8");
         cliente.DefaultRequestHeaders.Add("accept", "application/json");
     }
 
-    [Fact]
+    /*[Fact]
     public async Task pruebaCrearExperienciaEducativaExitosa()
     {
         var experienciaValida = new
         {
-            nombre = "Logica",
+            nombre = "Quimica",
             NRC = "12345"
         };
 
@@ -113,7 +113,7 @@ public class TestExperienciaEducativa()
     [Fact]
     public async Task pruebaEliminarExperienciaEducativaExitosa()
     {
-        int idExperienciaEducativa = 4;
+        int idExperienciaEducativa = 5;
 
         var response = await cliente.DeleteAsync($"VentanillaEnLinea/ServiciosNode/experiencias/{idExperienciaEducativa}");
         var responseBody = await response.Content.ReadAsStringAsync();
@@ -123,21 +123,6 @@ public class TestExperienciaEducativa()
 
         Assert.True(response.IsSuccessStatusCode, $"Se esperaba que la solicitud tuviera éxito. Código: {response.StatusCode}");
         Assert.Contains("Experiencia educativa eliminada correctamente", responseBody, StringComparison.OrdinalIgnoreCase);
-    }
-
-    [Fact]
-    public async Task pruebaEliminarExperienciaEducativaFallida()
-    {
-        int idExperienciaEducativa = 9999;
-
-        var response = await cliente.DeleteAsync($"VentanillaEnLinea/ServiciosNode/experiencias/{idExperienciaEducativa}");
-        var responseBody = await response.Content.ReadAsStringAsync();
-
-        Console.WriteLine($"Código de estado: {response.StatusCode}");
-        Console.WriteLine($"Cuerpo de la respuesta: {responseBody}");
-
-        Assert.False(response.IsSuccessStatusCode, "Se esperaba que la solicitud fallara debido a un ID inexistente.");
-        Assert.Contains("Error al eliminar la experiencia educativa", responseBody, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
