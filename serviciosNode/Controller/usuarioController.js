@@ -9,7 +9,7 @@ const pruebaPost = async (req, res = response) => {
 
         if (!nombre || !clave || !correo || !contrasena || !idTipoUsuario || !idSecretarioAsignado || estado === undefined) {
             return res.status(400).json({
-                message: 'Todos los campos son obligatorios (nombre, clave, correo, contrasena, idTipoUsuario, idSecretarioAsignado, estado)',
+                message: 'Todos los campos son obligatorios',
             });
         }
 
@@ -103,27 +103,6 @@ const validarUsuario = async (req, res) => {
     } catch (error) {
         console.error('Error al validar usuario:', error.message);
         res.status(400).json({ message: error.message });
-    }
-};
-
-const obtenerUsuario = async (req, res) => {
-    const { idUsuario } = req.params;
-
-    console.log(`Obteniendo información del usuario con ID: ${idUsuario}`);
-    try {
-        if (!idUsuario) {
-            return res.status(400).json({ message: 'El ID del usuario es obligatorio' });
-        }
-
-        const usuarioInfo = await UsuarioDAO.obtenerInformacionUsuario(idUsuario);
-
-        return res.status(200).json({
-            message: 'Información del usuario obtenida exitosamente',
-            data: usuarioInfo,
-        });
-    } catch (error) {
-        console.error('Error al obtener información del usuario:', error.message);
-        res.status(500).json({ message: 'Error al obtener información del usuario' });
     }
 };
 

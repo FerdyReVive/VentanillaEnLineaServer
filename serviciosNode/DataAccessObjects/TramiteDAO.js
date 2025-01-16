@@ -53,7 +53,9 @@ class TramiteDAO {
               include: [{
                 model: usuario,
                 as: 'usuario',
-                where: { idSecretarioAsignado: idSecretario }
+                where: { idSecretarioAsignado: idSecretario,
+                    estado: 1
+                }
               }]
             });
             return tramites;
