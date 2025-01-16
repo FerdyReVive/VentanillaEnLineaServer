@@ -1,6 +1,7 @@
 const {response} = require("express");
 const { usuario, tramite } = require('../Models');
 const TramiteDAO = require("../DataAccessObjects/TramiteDAO");
+const DocumentoDAO = require("../DataAccessObjects/DocumentoDAO");
 
 const pruebaCrearTramite = async (req, res) => {
     const { fecha, idTipoTramite, idUsuario, estado } = req.body;
@@ -85,4 +86,28 @@ const pruebaConsultarTramitesPorUsuario = async (req, res) => {
         }
     };
 
-module.exports = {pruebaCrearTramite, pruebaEditarEstadoTramite, pruebaConsultarTramitesPorUsuario, pruebaConsultarTramitesPorSecretario}
+    const pruebaConsultarDocumentosPorTramite = async (req, res) => {
+        const { idTramite } = req.params;
+
+        console.log(`Consultando documentos asignados al tramite con ID: ${idTramite}`);
+
+        try {
+            if (!idTramite) {
+            return res.status(400).json({ message: 'El idSecretario es obligatorio' });
+            }
+
+            const documentos = await DocumentoDAO.obtenerDocumentosPorTramite(idTramite);
+
+            if (documentos.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron trámites asignados a este secretario' });
+            }
+
+            res.status(200).json(documentos);
+        } catch (error) {
+            console.error('Error al consultar trámites por secretario:', error.message);
+            res.status(500).json({ message: 'Error al consultar trámites por secretario' });
+        }
+    };
+
+
+module.exports = {pruebaCrearTramite, pruebaEditarEstadoTramite, pruebaConsultarTramitesPorUsuario, pruebaConsultarTramitesPorSecretario, pruebaConsultarDocumentosPorTramite}
